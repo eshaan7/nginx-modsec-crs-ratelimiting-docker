@@ -1,0 +1,19 @@
+# This docker-compose file starts owasp/modsecurity-crs
+
+version: "3"
+
+services:
+  crs:
+    image: owasp/modsecurity-crs
+    container_name: nginx_modsec_crs
+    ports:
+      - "80:80"
+      # only available if SETTLS was enabled:
+      - "443:443"
+    env_file:
+      - ".env"
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+      # Volumes for ModSecurity Tuning
+      - ./REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf:/etc/modsecurity.d/owasp-crs/rules/REQUEST-900-EXCLUSION-RULES-BEFORE-CRS.conf
+      - ./RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf:/etc/modsecurity.d/owasp-crs/rules/RESPONSE-999-EXCLUSION-RULES-AFTER-CRS.conf
